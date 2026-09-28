@@ -1,0 +1,68 @@
+﻿services:
+  rizzo-flow:
+    build:
+      context: ..
+      dockerfile: playground/rizzo-flow-api/Dockerfile
+    image: playground-rizzo-flow:latest
+    ports:
+      - "${RIZZO_PORT:-8017}:8017"
+    volumes:
+      - rizzo-models:/app/models
+      - rizzo-runtimes:/app/runtimes
+    restart: unless-stopped
+    env_file:
+      - .env
+
+  minicpm:
+    image: ghcr.io/ggml-org/llama.cpp:server
+    command: >
+      --hf-repo openbmb/MiniCPM5-2B-GGUF
+      --hf-file MiniCPM5-2B-Q4_K_M.gguf
+      --host 0.0.0.0
+      --port 8001
+      -c ${MINICPM_CTX_SIZE:-32768}
+      -t ${MINICPM_THREADS:-8}
+      --jinja
+    ports:
+      - "${MINICPM_PORT:-8001}:8001"
+    volumes:
+      - minicpm-models:/root/.cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  clm:
+    build:
+      context: ..
+      dockerfile: playground/clm-api/Dockerfile
+    image: playground-clm:latest
+    ports:
+      - "8700:8700"
+    restart: unless-stopped
+
+  streamlit:
+    build:
+      context: ./streamlit-app
+    image: playground-streamlit:latest
+    ports:
+      - "${STREAMLIT_PORT:-8501}:8501"
+    volumes:
+      - ./streamlit-app:/app
+    depends_on:
+      - rizzo-flow
+      - minicpm
+      - clm
+    environment:
+      - RIZZO_API_URL=http://rizzo-flow:8017
+      - MINICPM_API_URL=http://minicpm:8001
+      - CLM_API_URL=http://clm:8700
+    restart: unless-stopped
+
+volumes:
+  rizzo-models:
+  rizzo-runtimes:
+  minicpm-models:
