@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+﻿FROM python:3.11-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git curl libgomp1 ca-certificates && \
@@ -19,6 +19,6 @@ EXPOSE 8017
 
 # Entrypoint downloads model+runtime if not cached, then serves
 COPY playground/rizzo-flow-api/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]

@@ -1,8 +1,0 @@
-openai
-vllm
-jsonlines
-faiss-cpu
-# faiss-gpu
-fastapi
-uvicorn
-yarl

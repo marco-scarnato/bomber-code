@@ -2,7 +2,7 @@
 
 WORKDIR /app
 
-RUN pip install --no-cache-dir fastapi uvicorn numpy
+RUN pip install --no-cache-dir fastapi uvicorn numpy requests
 
 COPY CLM/src /app/src
 COPY CLM/tools /app/tools
