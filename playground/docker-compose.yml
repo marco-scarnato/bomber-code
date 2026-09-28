@@ -41,7 +41,7 @@ services:
       dockerfile: playground/clm-api/Dockerfile
     image: playground-clm:latest
     ports:
-      - "${CLM_PORT:-8700}:8700"
+      - "8700:8700"
     restart: unless-stopped
 
   streamlit:
