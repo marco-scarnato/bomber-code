@@ -28,7 +28,7 @@ L'API sarà disponibile su: `http://localhost:8700`
 ### 2. Standalone in locale con Python
 ```bash
 cd CLM
-pip install fastapi uvicorn numpy requests
+pip install fastapi uvicorn numpy
 python tools/playground_mock.py --port 8700 --host 0.0.0.0 --cors
 ```
 

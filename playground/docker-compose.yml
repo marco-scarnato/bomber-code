@@ -1,4 +1,4 @@
-﻿services:
+services:
   rizzo-flow:
     build:
       context: ..
@@ -41,7 +41,7 @@
       dockerfile: playground/clm-api/Dockerfile
     image: playground-clm:latest
     ports:
-      - "8700:8700"
+      - "${CLM_PORT:-8700}:8700"
     restart: unless-stopped
 
   streamlit:
