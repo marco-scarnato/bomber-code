@@ -1,4 +1,4 @@
-﻿import streamlit as st
+import streamlit as st
 import os
 from utils.rizzo_client import RizzoClient
 from utils.minicpm_client import MiniCPMClient

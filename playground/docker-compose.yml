@@ -9,6 +9,12 @@ services:
     volumes:
       - rizzo-models:/app/models
       - rizzo-runtimes:/app/runtimes
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8017/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
     restart: unless-stopped
     env_file:
       - .env
@@ -42,6 +48,12 @@ services:
     image: playground-clm:latest
     ports:
       - "8700:8700"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8700/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     restart: unless-stopped
 
   streamlit:
